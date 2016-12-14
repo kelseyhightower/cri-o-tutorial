@@ -87,7 +87,13 @@ go version
 ```
 
 ```
-...
+go version go1.7.4 linux/amd64
+```
+
+#### Build cri-o from source
+
+```
+sudo apt-get install -y libglib2.0-dev libseccomp-dev libapparmor-dev
 ```
 
 ```
@@ -96,10 +102,6 @@ go get -d github.com/kubernetes-incubator/cri-o
 
 ```
 cd $GOPATH/src/github.com/kubernetes-incubator/cri-o
-```
-
-```
-sudo apt-get install libglib2.0-dev libseccomp-dev libapparmor-dev
 ```
 
 ```
