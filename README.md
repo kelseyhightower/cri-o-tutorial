@@ -25,9 +25,13 @@ gcloud compute ssh cri-o
 
 ### runc
 
+Download the `runc` release binary:
+
 ```
 wget https://github.com/opencontainers/runc/releases/download/v1.0.0-rc2/runc-linux-amd64
 ```
+
+Set the executable bit and copy the `runc` binary into your PATH:
 
 ```
 chmod +x runc-linux-amd64 
@@ -36,6 +40,8 @@ chmod +x runc-linux-amd64
 ```
 sudo mv runc-linux-amd64 /usr/bin/runc
 ```
+
+Print the `runc` version:
 
 ```
 runc -version
@@ -46,7 +52,17 @@ commit: c91b5bea4830a57eac7882d7455d59518cdf70ec
 spec: 1.0.0-rc2-dev
 ```
 
-### ocid
+### cri-o
+
+The `cri-o` project does not ship binary releases so you'll need to build it from source.
+
+Download the Go 1.7.4 binary release:
+
+```
+wget https://storage.googleapis.com/golang/go1.7.4.linux-amd64.tar.gz
+```
+
+Install Go 1.7.4:
 
 ```
 sudo tar -xvf go1.7.4.linux-amd64.tar.gz -C /usr/local/
@@ -62,6 +78,16 @@ export GOPATH=$HOME/go
 
 ```
 export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+```
+
+At this point the Go 1.7.4 tool chain should be installed:
+
+```
+go version
+```
+
+```
+...
 ```
 
 ```
