@@ -4,11 +4,11 @@ This tutorial will walk you through the installation of [cri-o](https://github.c
 
 ### Items that will be installed
 
-* docker 1.12.4 - Temporary dependency for pulling and storing docker images on disk.
-* runc 1.0.0-rc2 - The OCI runtime to launch the container
 * ocid - The implementation of the Kubernetes CRI, which manages Pods.
 * ocic - The ocid client for testing.
 * cni - The Container Network Interface
+* runc 1.0.0-rc2 - The OCI runtime to launch the container
+* docker 1.12.4 - Temporary dependency for pulling and storing docker images on disk.
 
 ## Prerequisites
 
