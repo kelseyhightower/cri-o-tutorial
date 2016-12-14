@@ -361,10 +361,10 @@ Annotations:
 Run a container inside a pod
 
 ```
-CONTAINER_ID=$(ocic ctr create --pod $POD_ID --config test/testdata/container_redis.json)
+CONTAINER_ID=$(sudo ocic ctr create --pod $POD_ID --config test/testdata/container_redis.json)
 ```
 
-> ocic ctr create --pod $POD_ID --config test/testdata/container_redis.json
+> sudo ocic ctr create --pod $POD_ID --config test/testdata/container_redis.json
 
 ```
 sudo ocic ctr start --id $CONTAINER_ID
