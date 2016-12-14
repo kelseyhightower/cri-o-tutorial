@@ -350,7 +350,7 @@ Attempt: 1
 Status: SANDBOX_READY
 Created: 2016-12-14 15:59:04.373680832 +0000 UTC
 Network namespace: /var/run/netns/cni-bc37b858-fb4d-41e6-58b0-9905d0ba23f8
-IP Address: 10.88.0.4
+IP Address: 10.88.0.2
 Labels:
 	group -> test
 Annotations:
@@ -397,16 +397,16 @@ telnet 10.88.0.2 6379
 ```
 
 ```
-Trying 10.88.0.3...
-Connected to 10.88.0.3.
+Trying 10.88.0.2...
+Connected to 10.88.0.2.
 Escape character is '^]'.
 ```
 
 At the prompt type `MONITOR`:
 
 ```
-Trying 10.88.0.3...
-Connected to 10.88.0.3.
+Trying 10.88.0.2...
+Connected to 10.88.0.2.
 Escape character is '^]'.
 MONITOR
 +OK
