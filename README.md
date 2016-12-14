@@ -2,6 +2,25 @@
 
 This tutorial will walk you through the installation of [cri-o](https://github.com/kubernetes-incubator/cri-o), an Open Container Initiative-based implementation of [Kubernetes Container Runtime Interface](https://github.com/kubernetes/kubernetes/blob/master/docs/proposals/container-runtime-interface-v1.md), and the creation of [Redis](https://redis.io/) server running in a [Pod](http://kubernetes.io/docs/user-guide/pods/).
 
+## Prerequisites
+
+A machine is required to download and build the `cri-o` components and run the commands in this tutorial.
+
+Create a machine running Ubuntu 16.10:
+
+```
+gcloud compute instances create cri-o \
+  --machine-type n1-standard-2 \
+  --image-family ubuntu-1610 \
+  --image-project ubuntu-os-cloud
+```
+
+SSH into the machine:
+
+```
+gcloud compute ssh cri-o
+```
+
 ## Installation
 
 ### runc
