@@ -134,6 +134,43 @@ install -D -m 644 ocid.conf /etc/ocid/ocid.conf
 install -D -m 644 seccomp.json /etc/ocid/seccomp.json
 ```
 
+---
+
+Start the `ocid` system daemon:
+
+```
+sudo sh -c 'echo "[Unit]
+Description=OCI-based implementation of Kubernetes Container Runtime Interface
+Documentation=https://github.com/kubernetes-incubator/cri-o
+
+[Service]
+ExecStart=/usr/bin/ocid --debug
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/ocid.service'
+```
+
+```
+sudo systemctl daemon-reload
+```
+```
+sudo systemctl enable ocid
+```
+```
+sudo systemctl start ocid
+```
+
+Ensure the `ocid` service is running:
+
+```
+sudo ocic runtimeversion
+```
+```
+VersionResponse: Version: 0.1.0, RuntimeName: runc, RuntimeVersion: 1.0.0-rc2, RuntimeApiVersion: v1alpha1
+```
+
 ### cni
 
 ```
