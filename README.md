@@ -211,6 +211,80 @@ sudo mkdir -p /opt/cni/bin
 sudo cp bin/* /opt/cni/bin/
 ```
 
+### docker
+
+Docker is required to pull and store docker images on the local filesystem. The dependency on the docker daemon will go away over time as cri-o will eventually support these features natively.
+
+Download the Docker 
+
+Download the Docker 1.12.4 binary release: 
+
+```
+wget https://get.docker.com/builds/Linux/x86_64/docker-1.12.4.tgz
+```
+
+Install Docker:
+
+```
+tar -xvf docker-1.12.4.tgz
+```
+
+```
+sudo cp docker/docker* /usr/bin/
+```
+
+```
+sudo sh -c 'echo "[Unit]
+Description=Docker Application Container Engine
+Documentation=http://docs.docker.io
+
+[Service]
+ExecStart=/usr/bin/docker daemon \
+  --iptables=false \
+  --ip-masq=false \
+  --host=unix:///var/run/docker.sock \
+  --log-level=error \
+  --storage-driver=overlay
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/docker.service'
+```
+
+```
+sudo systemctl daemon-reload
+```
+
+```
+sudo systemctl enable docker
+```
+
+```
+sudo systemctl start docker
+```
+
+```
+sudo docker version
+```
+
+```
+Client:
+ Version:      1.12.4
+ API version:  1.24
+ Go version:   go1.6.4
+ Git commit:   1564f02
+ Built:        Tue Dec 13 02:47:26 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.12.4
+ API version:  1.24
+ Go version:   go1.6.4
+ Git commit:   1564f02
+ Built:        Tue Dec 13 02:47:26 2016
+ OS/Arch:      linux/amd64
+```
 
 ## Pod Tutorial
 
