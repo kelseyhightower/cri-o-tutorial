@@ -1,5 +1,7 @@
 # cri-o Tutorial
 
+This tutorial will walk you through the installation of [cri-o](https://github.com/kubernetes-incubator/cri-o), an Open Container Initiative-based implementation of [Kubernetes Container Runtime Interface](https://github.com/kubernetes/kubernetes/blob/master/docs/proposals/container-runtime-interface-v1.md), and the creation of redis server running in a Pod. 
+
 ## Installation
 
 ### runc
