@@ -2,6 +2,14 @@
 
 This tutorial will walk you through the installation of [cri-o](https://github.com/kubernetes-incubator/cri-o), an Open Container Initiative-based implementation of [Kubernetes Container Runtime Interface](https://github.com/kubernetes/kubernetes/blob/master/docs/proposals/container-runtime-interface-v1.md), and the creation of [Redis](https://redis.io/) server running in a [Pod](http://kubernetes.io/docs/user-guide/pods/).
 
+### Items that will be installed
+
+* docker 1.12.4 - Temporary dependency for pulling and storing docker images on disk.
+* runc 1.0.0-rc2 - The OCI runtime to launch the container
+* ocid - The implementation of the Kubernetes CRI, which manages Pods.
+* ocic - The ocid client for testing.
+* cni - The Container Network Interface
+
 ## Prerequisites
 
 A machine is required to download and build the `cri-o` components and run the commands in this tutorial.
