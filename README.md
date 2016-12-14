@@ -117,6 +117,9 @@ make
 ```
 sudo make install
 ```
+
+Output:
+
 ```
 install -D -m 755 kpod /usr/bin/kpod
 install -D -m 755 ocid /usr/bin/ocid
