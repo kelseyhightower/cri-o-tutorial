@@ -2,17 +2,9 @@
 
 This tutorial will walk you through the installation of [cri-o](https://github.com/kubernetes-incubator/cri-o), an Open Container Initiative-based implementation of [Kubernetes Container Runtime Interface](https://github.com/kubernetes/kubernetes/blob/master/docs/proposals/container-runtime-interface-v1.md), and the creation of [Redis](https://redis.io/) server running in a [Pod](http://kubernetes.io/docs/user-guide/pods/).
 
-### Items that will be installed
-
-* ocid - The implementation of the Kubernetes CRI, which manages Pods.
-* ocic - The ocid client for testing.
-* cni - The Container Network Interface
-* runc - The OCI runtime to launch the container
-* docker - Temporary dependency for pulling and storing docker images on disk.
-
 ## Prerequisites
 
-A machine is required to download and build the `cri-o` components and run the commands in this tutorial.
+A Linux machine is required to download and build the `cri-o` components and run the commands in this tutorial.
 
 Create a machine running Ubuntu 16.10:
 
@@ -30,6 +22,15 @@ gcloud compute ssh cri-o
 ```
 
 ## Installation
+
+This section will walk you through installing the following components:
+
+* ocid - The implementation of the Kubernetes CRI, which manages Pods.
+* ocic - The ocid client for testing.
+* cni - The Container Network Interface
+* runc - The OCI runtime to launch the container
+* docker - Temporary dependency for pulling and storing docker images on disk.
+
 
 ### runc
 
