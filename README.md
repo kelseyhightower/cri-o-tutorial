@@ -56,6 +56,8 @@ spec: 1.0.0-rc2-dev
 
 The `cri-o` project does not ship binary releases so you'll need to build it from source.
 
+#### Install the Go runtime and tool chain
+
 Download the Go 1.7.4 binary release:
 
 ```
@@ -106,6 +108,10 @@ cd $GOPATH/src/github.com/kubernetes-incubator/cri-o
 
 ```
 make install.tools
+```
+
+```
+make
 ```
 
 ```
