@@ -81,13 +81,15 @@ install -D -m 644 seccomp.json /etc/ocid/seccomp.json
 ```
 go get -d github.com/containernetworking/cni
 ```
+
 ```
 cd $GOPATH/src/github.com/containernetworking/cni
 ```
+
 ```
 sudo mkdir -p /etc/cni/net.d
 ```
-```
+
 ```
 sudo sh -c 'cat >/etc/cni/net.d/10-mynet.conf <<-EOF
 {
@@ -107,6 +109,7 @@ sudo sh -c 'cat >/etc/cni/net.d/10-mynet.conf <<-EOF
 }
 EOF'
 ```
+
 ```
 sudo sh -c 'cat >/etc/cni/net.d/99-loopback.conf <<-EOF
 {
@@ -119,9 +122,11 @@ EOF'
 ```
 ./build
 ```
+
 ```
 sudo mkdir -p /opt/cni/bin
 ```
+
 ```
 sudo cp bin/* /opt/cni/bin/
 ```
@@ -140,6 +145,8 @@ sudo ocic pod create --config test/testdata/sandbox_config.json
 ```
 POD_ID=$(sudo ocic pod create --config test/testdata/sandbox_config.json)
 ```
+
+> sudo ocic pod create --config test/testdata/sandbox_config.json
 
 ```
 sudo ocic pod status --id $POD_ID
@@ -169,6 +176,8 @@ Run a container inside a pod
 ```
 CONTAINER_ID=$(ocic ctr create --pod $POD_ID --config test/testdata/container_redis.json)
 ```
+
+> ocic ctr create --pod $POD_ID --config test/testdata/container_redis.json
 
 ```
 sudo ocic ctr start --id $CONTAINER_ID
