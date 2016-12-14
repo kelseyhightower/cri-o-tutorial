@@ -330,10 +330,6 @@ cd $GOPATH/src/github.com/kubernetes-incubator/cri-o
 ```
 
 ```
-sudo ocic pod create --config test/testdata/sandbox_config.json
-```
-
-```
 POD_ID=$(sudo ocic pod create --config test/testdata/sandbox_config.json)
 ```
 
