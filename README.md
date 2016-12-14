@@ -177,9 +177,31 @@ sudo sh -c 'cat >/etc/cni/net.d/99-loopback.conf <<-EOF
 EOF'
 ```
 
+Build the `cni` binaries:
+
 ```
 ./build
 ```
+
+Output:
+
+```
+Building API
+Building reference CLI
+Building plugins
+   flannel
+   tuning
+   bridge
+   ipvlan
+   loopback
+   macvlan
+   ptp
+   dhcp
+   host-local
+   noop
+```
+
+Install the `cni` binaries:
 
 ```
 sudo mkdir -p /opt/cni/bin
