@@ -61,9 +61,9 @@ commit: c91b5bea4830a57eac7882d7455d59518cdf70ec
 spec: 1.0.0-rc2-dev
 ```
 
-### cri-o
+### ocid
 
-The `cri-o` project does not ship binary releases so you'll need to build it from source.
+The `ocid` project does not ship binary releases so you'll need to build it from source.
 
 #### Install the Go runtime and tool chain
 
@@ -101,7 +101,7 @@ go version
 go version go1.7.4 linux/amd64
 ```
 
-#### Build cri-o from source
+#### Build ocid from source
 
 ```
 sudo apt-get install -y libglib2.0-dev libseccomp-dev libapparmor-dev
@@ -143,9 +143,7 @@ install -D -m 644 ocid.conf /etc/ocid/ocid.conf
 install -D -m 644 seccomp.json /etc/ocid/seccomp.json
 ```
 
----
-
-Start the `ocid` system daemon:
+#### Start the ocid system daemon
 
 ```
 sudo sh -c 'echo "[Unit]
@@ -171,7 +169,7 @@ sudo systemctl enable ocid
 sudo systemctl start ocid
 ```
 
-Ensure the `ocid` service is running:
+#### Ensure the ocid service is running
 
 ```
 sudo ocic runtimeversion
@@ -182,45 +180,16 @@ VersionResponse: Version: 0.1.0, RuntimeName: runc, RuntimeVersion: 1.0.0-rc2, R
 
 ### cni
 
+This tutorial will use the latest version of `cni` from the master branch and build it from source.
+
+Download the `cni` source tree:
+
 ```
 go get -d github.com/containernetworking/cni
 ```
 
 ```
 cd $GOPATH/src/github.com/containernetworking/cni
-```
-
-```
-sudo mkdir -p /etc/cni/net.d
-```
-
-```
-sudo sh -c 'cat >/etc/cni/net.d/10-mynet.conf <<-EOF
-{
-    "cniVersion": "0.2.0",
-    "name": "mynet",
-    "type": "bridge",
-    "bridge": "cni0",
-    "isGateway": true,
-    "ipMasq": true,
-    "ipam": {
-        "type": "host-local",
-        "subnet": "10.88.0.0/16",
-        "routes": [
-            { "dst": "0.0.0.0/0"  }
-        ]
-    }
-}
-EOF'
-```
-
-```
-sudo sh -c 'cat >/etc/cni/net.d/99-loopback.conf <<-EOF
-{
-    "cniVersion": "0.2.0",
-    "type": "loopback"
-}
-EOF'
 ```
 
 Build the `cni` binaries:
@@ -257,11 +226,49 @@ sudo mkdir -p /opt/cni/bin
 sudo cp bin/* /opt/cni/bin/
 ```
 
+#### Configure CNI
+
+```
+sudo mkdir -p /etc/cni/net.d
+```
+
+```
+sudo sh -c 'cat >/etc/cni/net.d/10-mynet.conf <<-EOF
+{
+    "cniVersion": "0.2.0",
+    "name": "mynet",
+    "type": "bridge",
+    "bridge": "cni0",
+    "isGateway": true,
+    "ipMasq": true,
+    "ipam": {
+        "type": "host-local",
+        "subnet": "10.88.0.0/16",
+        "routes": [
+            { "dst": "0.0.0.0/0"  }
+        ]
+    }
+}
+EOF'
+```
+
+```
+sudo sh -c 'cat >/etc/cni/net.d/99-loopback.conf <<-EOF
+{
+    "cniVersion": "0.2.0",
+    "type": "loopback"
+}
+EOF'
+```
+
+At this point `cni` is installed and configured to allocation IP address to containers from the `10.88.0.0/16` subnet.
+
 ### docker
 
 Docker is required to pull and store docker images on the local filesystem. The dependency on the docker daemon will go away over time as cri-o will eventually support these features natively.
 
-Download the Docker 
+
+#### Install Docker
 
 Download the Docker 1.12.4 binary release: 
 
@@ -269,7 +276,7 @@ Download the Docker 1.12.4 binary release:
 wget https://get.docker.com/builds/Linux/x86_64/docker-1.12.4.tgz
 ```
 
-Install Docker:
+Extract and install the Docker binaries:
 
 ```
 tar -xvf docker-1.12.4.tgz
@@ -278,6 +285,8 @@ tar -xvf docker-1.12.4.tgz
 ```
 sudo cp docker/docker* /usr/bin/
 ```
+
+#### Start the Docker daemon
 
 ```
 sudo sh -c 'echo "[Unit]
@@ -310,9 +319,13 @@ sudo systemctl enable docker
 sudo systemctl start docker
 ```
 
+#### Ensure the Docker daemon is running
+
 ```
 sudo docker version
 ```
+
+Output:
 
 ```
 Client:
@@ -334,11 +347,17 @@ Server:
 
 ## Pod Tutorial
 
+Now that the `cri-o` components have been installed and configured we are ready to create a Pod. This section will walk you through lauching a Redis server in a Pod. Once the Redis server is running we'll use telnet to verify it's working, then we'll stop the Redis server and clean up the Pod.
+
+### Creating a Pod
+
+First we need to setup a Pod sandbox using a Pod configuration, which can be found in the `cri-o` source tree: 
+
 ```
 cd $GOPATH/src/github.com/kubernetes-incubator/cri-o
 ```
 
-### Create a Pod
+Next create the Pod and capture the Pod ID for later use:
 
 ```
 POD_ID=$(sudo ocic pod create --config test/testdata/sandbox_config.json)
@@ -346,9 +365,13 @@ POD_ID=$(sudo ocic pod create --config test/testdata/sandbox_config.json)
 
 > sudo ocic pod create --config test/testdata/sandbox_config.json
 
+Use the `ocic` command to get the status of the Pod:
+
 ```
 sudo ocic pod status --id $POD_ID
 ```
+
+Output:
 
 ```
 ID: cd6c0883663c6f4f99697aaa15af8219e351e03696bd866bc3ac055ef289702a
@@ -369,7 +392,9 @@ Annotations:
 	security.alpha.kubernetes.io/unsafe-sysctls -> kernel.msgmax=8192
 ```
 
-### Run a redis container inside the Pod
+### Create a Redis container inside the Pod
+
+Use the `ocic` command to create a redis container from a container configuration and attach it to the Pod created earlier:
 
 ```
 CONTAINER_ID=$(sudo ocic ctr create --pod $POD_ID --config test/testdata/container_redis.json)
@@ -377,11 +402,15 @@ CONTAINER_ID=$(sudo ocic ctr create --pod $POD_ID --config test/testdata/contain
 
 > sudo ocic ctr create --pod $POD_ID --config test/testdata/container_redis.json
 
-The command will take a few seconds to return because the redis container needs to be pulled using docker.
+The `ocic ctr create` command  will take a few seconds to return because the redis container needs to be pulled using the docker daemon.
+
+Start the Redis container:
 
 ```
 sudo ocic ctr start --id $CONTAINER_ID
 ```
+
+Get the status for the Redis container:
 
 ```
 sudo ocic ctr status --id $CONTAINER_ID
