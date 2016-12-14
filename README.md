@@ -329,6 +329,8 @@ Server:
 cd $GOPATH/src/github.com/kubernetes-incubator/cri-o
 ```
 
+### Create a Pod
+
 ```
 POD_ID=$(sudo ocic pod create --config test/testdata/sandbox_config.json)
 ```
@@ -358,13 +360,15 @@ Annotations:
 	security.alpha.kubernetes.io/unsafe-sysctls -> kernel.msgmax=8192
 ```
 
-Run a container inside a pod
+### Run a redis container inside the Pod
 
 ```
 CONTAINER_ID=$(sudo ocic ctr create --pod $POD_ID --config test/testdata/container_redis.json)
 ```
 
 > sudo ocic ctr create --pod $POD_ID --config test/testdata/container_redis.json
+
+The command will take a few seconds to return because the redis container needs to be pulled using docker.
 
 ```
 sudo ocic ctr start --id $CONTAINER_ID
@@ -374,6 +378,8 @@ sudo ocic ctr start --id $CONTAINER_ID
 sudo ocic ctr status --id $CONTAINER_ID
 ```
 
+Output:
+
 ```
 ID: d0147eb67968d81aaddbccc46cf1030211774b5280fad35bce2fdb0a507a2e7a
 Name: podsandbox1-redis
@@ -381,6 +387,49 @@ Status: CONTAINER_RUNNING
 Created: 2016-12-14 16:00:42.889089352 +0000 UTC
 Started: 2016-12-14 16:01:56.733704267 +0000 UTC
 ```
+
+### Test the Redis container
+
+Connect to the Pod IP on port 6379:
+
+```
+telnet 10.88.0.2 6379
+```
+
+```
+Trying 10.88.0.3...
+Connected to 10.88.0.3.
+Escape character is '^]'.
+```
+
+At the prompt type `MONITOR`:
+
+```
+Trying 10.88.0.3...
+Connected to 10.88.0.3.
+Escape character is '^]'.
+MONITOR
++OK
+```
+
+Exit the telnet session by typing `ctrl-]` and `quit` at the prompt:
+
+```
+^]
+
+telnet> quit
+Connection closed.
+```
+
+#### Viewing the Redis logs
+
+The Redis logs are logged to the stderr of the ocid service, which can be viewed using `journalctl`:
+
+```
+sudo journalctl -u ocid --no-pager
+``` 
+
+### Stop the redis container and delete the Pod
 
 ```
 sudo ocic ctr stop --id $CONTAINER_ID
