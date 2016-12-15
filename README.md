@@ -360,10 +360,10 @@ cd $GOPATH/src/github.com/kubernetes-incubator/cri-o
 Next create the Pod and capture the Pod ID for later use:
 
 ```
-POD_ID=$(sudo ocic pod create --config test/testdata/sandbox_config.json)
+POD_ID=$(sudo ocic pod run --config test/testdata/sandbox_config.json)
 ```
 
-> sudo ocic pod create --config test/testdata/sandbox_config.json
+> sudo ocic pod run --config test/testdata/sandbox_config.json
 
 Use the `ocic` command to get the status of the Pod:
 
